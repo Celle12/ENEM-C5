@@ -23,7 +23,7 @@
                 <p class="text-xs text-slate-400">Analise a proposta projetada, descubra a falha com a turma e revele o diagnóstico.</p>
             </div>
             <div class="flex items-center gap-3">
-                <span id="contadorCasos" class="text-xs bg-slate-700 text-slate-300 font-medium px-3 py-1.5 rounded-lg">Caso 1 de 6</span>
+                <span id="contadorCasos" class="text-xs bg-slate-700 text-slate-300 font-medium px-3 py-1.5 rounded-lg">Caso 1 de 4</span>
                 <button onclick="proximoCaso()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg transition shadow-md">
                     Próximo Caso ➔
                 </button>
@@ -49,7 +49,7 @@
                 <div class="bg-slate-900 border border-slate-700 rounded-xl p-5 mb-6 relative">
                     <span class="absolute -top-3 left-4 bg-indigo-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded">Texto do Aluno no Papel</span>
                     <p id="txtPropostaAluno" class="text-sm md:text-base text-slate-200 leading-relaxed italic">
-                        "Portanto, cabe ao <span class="text-amber-400 font-semibold">Ministério da Justiça</span> implementar oficinas de reforço escolar nas periferias, por meio de parcerias com ONGs locais, a fim de garantir que os jovens permaneçam estudando. Afinal, a educação transforma vidas."
+                        <!-- Carregado via JS sem marcação prévia -->
                     </p>
                 </div>
             </div>
@@ -60,9 +60,10 @@
             </button>
         </section>
 
-        <!-- COLUNA DIREITA: PAINEL DE AUDITORIA E NOTA -->
+        <!-- COLUNA DIREITA: PAINEL DE AUDITORIA E PLACAR -->
         <section class="lg:col-span-5 flex flex-col gap-6">
             
+            <!-- Caixa de Veredito -->
             <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex-1 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-4">
@@ -71,7 +72,7 @@
                     </div>
 
                     <!-- Estado Oculto Inicial -->
-                    <div id="painelOculto" class="text-center py-12 text-slate-400">
+                    <div id="painelOculto" class="text-center py-10 text-slate-400">
                         <p class="text-3xl mb-2">🧑‍⚖️</p>
                         <p class="text-sm">Peça para a turma analisar o texto ao lado e descobrir o que está incorreto. Depois, clique no botão verde para auditar!</p>
                     </div>
@@ -90,7 +91,47 @@
                 </div>
 
                 <div class="mt-4 pt-4 border-t border-slate-700 text-center">
-                    <p class="text-[11px] text-slate-400">💡 Dica para a professora: pergunte à turma qual ministério deveria estar no lugar do erro antes de revelar.</p>
+                    <p class="text-[11px] text-slate-400">💡 Dica: registre os palpites das equipes abaixo antes de revelar o gabarito.</p>
+                </div>
+            </div>
+
+            <!-- PLACAR DE EQUIPES -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-xl">
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">🏆 Placar de Equipes (Sala de Aula)</h4>
+                    <button onclick="zerarPlacar()" class="text-[10px] text-rose-400 hover:text-rose-300 transition underline">Zerar Placar</button>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Equipe 1 -->
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-indigo-300 block mb-1">Equipe 1</span>
+                            <input type="text" id="palpiteEquipe1" placeholder="Palpite da turma..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white mb-2 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-800">
+                            <span class="text-xs text-slate-400">Pontos: <strong id="pontosEquipe1" class="text-white text-sm">0</strong></span>
+                            <div class="flex gap-1">
+                                <button onclick="alterarPontos(1, -10)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded">-</button>
+                                <button onclick="alterarPontos(1, 10)" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2 py-0.5 rounded font-bold">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Equipe 2 -->
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-amber-300 block mb-1">Equipe 2</span>
+                            <input type="text" id="palpiteEquipe2" placeholder="Palpite da turma..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white mb-2 focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-slate-800">
+                            <span class="text-xs text-slate-400">Pontos: <strong id="pontosEquipe2" class="text-white text-sm">0</strong></span>
+                            <div class="flex gap-1">
+                                <button onclick="alterarPontos(2, -10)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded">-</button>
+                                <button onclick="alterarPontos(2, 10)" class="bg-amber-600 hover:bg-amber-500 text-white text-xs px-2 py-0.5 rounded font-bold">+</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -103,13 +144,14 @@
         Laboratório Interativo de Redação — Foco no Domínio dos Ministérios e Atribuições (ENEM).
     </footer>
 
-    <!-- SCRIPT DA DINÂMICA DE CASOS -->
+    <!-- SCRIPT DA DINÂMICA -->
     <script>
         const casosAuditoria = [
             {
                 eixo: "Educação / Evasão Escolar",
                 titulo: "Caminhos para combater a evasão escolar no ensino médio",
-                texto: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério da Justiça</span> implementar oficinas de reforço escolar nas periferias, por meio de parcerias com ONGs locais, a fim de garantir que os jovens permaneçam estudando. Afinal, a educação transforma vidas.',
+                textoLimpo: 'Portanto, cabe ao Ministério da Justiça implementar oficinas de reforço escolar nas periferias, por meio de parcerias com ONGs locais, a fim de garantir que os jovens permaneçam estudando. Afinal, a educação transforma vidas.',
+                textoRevelado: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério da Justiça</span> implementar oficinas de reforço escolar nas periferias, por meio de parcerias com ONGs locais, a fim de garantir que os jovens permaneçam estudando. Afinal, a educação transforma vidas.',
                 nota: "80 / 200",
                 statusClass: "bg-rose-500/20 text-rose-300 border border-rose-500/30",
                 statusText: "Contém Erro Crítico (Agente Inadequado)",
@@ -118,65 +160,76 @@
                     { icone: "✅", titulo: "Ação Válida", desc: "A ação de 'implementar oficinas de reforço escolar' é concreta e estruturada." },
                     { icone: "✅", titulo: "Meio Válido", desc: "Uso de parcerias com ONGs locais detalha bem o modo de execução." },
                     { icone: "✅", titulo: "Efeito Presente", desc: "Garantir a permanência escolar cumpre o impacto social exigido." },
-                    { icone: "❌", titulo: "Ausência de Detalhamento", desc: "A frase final ('Afinal, a educação transforma vidas') é um argumento vazio/lugar-comum, não um detalhamento válido (como repertório sociocultural produtivo ou citação de lei). Perde mais 40 pontos." }
+                    { icone: "❌", titulo: "Ausência de Detalhamento", desc: "A frase final ('Afinal, a educação transforma vidas') é um argumento vazio/lugar-comum, não um detalhamento válido. Perde mais 40 pontos." }
                 ]
             },
             {
                 eixo: "Saúde Pública / Saúde Mental",
                 titulo: "Caminhos para combater o estigma das doenças mentais",
-                texto: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério da Saúde</span> <span class="text-amber-400 font-semibold underline">conscientizar a população</span> sobre a depressão, por meio de postagens na internet, com o objetivo de reduzir o preconceito na sociedade.',
+                textoLimpo: 'Portanto, cabe ao Ministério da Saúde conscientizar a população sobre a depressão, por meio de postagens na internet, com o objetivo de reduzir o preconceito na sociedade.',
+                textoRevelado: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério da Saúde</span> <span class="text-amber-400 font-semibold underline">conscientizar a população</span> sobre a depressão, por meio de postagens na internet, com o objetivo de reduzir o preconceito na sociedade.',
                 nota: "80 / 200",
                 statusClass: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
                 statusText: "Atenção: Ação Vaga e Falta Detalhamento",
                 auditoria: [
                     { icone: "✅", titulo: "Agente Perfeito (Ministério da Saúde)", desc: "Órgão legítimo e com total competência legal sobre a saúde mental e os CAPS." },
-                    { icone: "⚠️", titulo: "Ação Vaga ('Conscientizar')", desc: "O ENEM penaliza severamente o verbo 'conscientizar' ou 'divulgar' isolado como ação principal, pois soa abstrato. O correto seria 'ampliar campanhas institucionais articuladas e expandir os atendimentos psicológicos nos postos'." },
+                    { icone: "⚠️", titulo: "Ação Vaga ('Conscientizar')", desc: "O ENEM penaliza severamente o verbo 'conscientizar' ou 'divulgar' isolado como ação principal, pois soa abstrato." },
                     { icone: "✅", titulo: "Meio Válido", desc: "Uso de postagens/mídias digitais como canal de difusão." },
                     { icone: "✅", titulo: "Efeito Presente", desc: "Reduzir o preconceito e estigma." },
-                    { icone: "❌", titulo: "Sem Detalhamento", desc: "Não há lei, citação de órgão auxiliar (como a OMS) ou justificativa aprofundada." }
+                    { icone: "❌", titulo: "Sem Detalhamento", desc: "Não há lei, citação de órgão auxiliar ou justificativa aprofundada." }
                 ]
             },
             {
                 eixo: "Tecnologia / Inclusão Digital",
                 titulo: "Inclusão digital da terceira idade no Brasil contemporâneo",
-                texto: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério das Comunicações</span> criar centros de alfabetização digital para idosos, por meio do repasse de verbas federais para os municípios, a fim de promover a cidadania tecnológica. Isso conforme a Constituição.',
+                textoLimpo: 'Portanto, cabe ao Ministério das Comunicações criar centros de alfabetização digital para idosos, por meio do repasse de verbas federais para os municípios, a fim de promover a cidadania tecnológica. Isso conforme a Constituição.',
+                textoRevelado: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério das Comunicações</span> criar centros de alfabetização digital para idosos, por meio do repasse de verbas federais para os municípios, a fim de promover a cidadania tecnológica. Isso <span class="text-amber-400 font-semibold underline">conforme a Constituição</span>.',
                 nota: "120 / 200",
                 statusClass: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
                 statusText: "Bom, mas Detalhamento Genérico",
                 auditoria: [
-                    { icone: "✅", titulo: "Agente Correto (Ministério das Comunicações)", desc: "Perfeito! O MCom é o órgão responsável pelas telecomunicações, conectividade e inclusão digital no país." },
-                    { icone: "✅", titulo: "Ação Concreta", desc: "Criar centros de alfabetização digital é uma intervenção estruturada e direta." },
+                    { icone: "✅", titulo: "Agente Correto (Ministério das Comunicações)", desc: "Perfeito! O MCom é o órgão responsável pelas telecomunicações e conectividade no país." },
+                    { icone: "✅", titulo: "Ação Concreta", desc: "Criar centros de alfabetização digital é uma intervenção estruturada." },
                     { icone: "✅", titulo: "Meio Válido", desc: "Repasse de verbas federais via municipalidades." },
                     { icone: "✅", titulo: "Efeito Presente", desc: "Promover a cidadania tecnológica." },
-                    { icone: "⚠️", titulo: "Detalhamento Genérico ('Isso conforme a Constituição')", desc: "A banca do ENEM exige que o repertório de detalhamento seja <strong>legitimado e produtivo</strong>. Citar 'a Constituição' sem especificar o artigo ou o princípio exato é considerado detalhamento genérico e pode receber desconto." }
+                    { icone: "⚠️", titulo: "Detalhamento Genérico ('Conforme a Constituição')", desc: "A banca do ENEM exige repertório legitimado e produtivo. Citar 'a Constituição' sem o artigo específico é considerado genérico." }
                 ]
             },
             {
                 eixo: "Meio Ambiente / Resíduos Sólidos",
                 titulo: "Alternativas para o descarte adequado do lixo eletrônico",
-                texto: 'Portanto, o <span class="text-amber-400 font-semibold underline">Governo Federal</span> deve implantar pontos de coleta seletiva de eletrônicos, por meio de parcerias com empresas de tecnologia, visando preservar o meio ambiente.',
+                textoLimpo: 'Portanto, o Governo Federal deve implantar pontos de coleta seletiva de eletrônicos, por meio de parcerias com empresas de tecnologia, visando preservar o meio ambiente.',
+                textoRevelado: 'Portanto, o <span class="text-amber-400 font-semibold underline">Governo Federal</span> deve implantar pontos de coleta seletiva de eletrônicos, por meio de parcerias com empresas de tecnologia, visando preservar o meio ambiente.',
                 nota: "80 / 200",
                 statusClass: "bg-rose-500/20 text-rose-300 border border-rose-500/30",
                 statusText: "Erro Crítico: Agente Genérico",
                 auditoria: [
-                    { icone: "❌", titulo: "Agente Genérico ('Governo Federal')", desc: "Erro clássico! O ENEM não aceita termos amplos como 'o governo', 'as autoridades' ou 'o Estado'. É obrigatório especificar o ministério ou órgão executor específico (neste caso, o <strong>Ministério do Meio Ambiente e Mudança do Clima</strong>)." },
+                    { icone: "❌", titulo: "Agente Genérico ('Governo Federal')", desc: "Erro clássico! O ENEM não aceita termos amplos como 'o governo'. É obrigatório especificar o ministério executor específico (<strong>Ministério do Meio Ambiente</strong>)." },
                     { icone: "✅", titulo: "Ação Concreta", desc: "Implantar pontos de coleta seletiva." },
-                    { icone: "✅", titulo: "Meio Válido", desc: "Parcerias com o setor privado/empresas de tecnologia." },
-                    { icon: "✅", titulo: "Efeito Presente", desc: "Preservar o ecossistema." },
+                    { icone: "✅", titulo: "Meio Válido", desc: "Parcerias com o setor privado." },
+                    { icone: "✅", titulo: "Efeito Presente", desc: "Preservar o ecossistema." },
                     { icone: "❌", titulo: "Sem Detalhamento", desc: "Faltou o 5º elemento obrigatório." }
                 ]
             }
         ];
 
         let indiceAtual = 0;
+        let score1 = 0;
+        let score2 = 0;
 
         function carregarCaso(index) {
             const caso = casosAuditoria[index];
             document.getElementById('contadorCasos').innerText = `Caso ${index + 1} de ${casosAuditoria.length}`;
             document.getElementById('txtEixo').innerText = caso.eixo;
             document.getElementById('txtTituloTema').innerText = caso.titulo;
-            document.getElementById('txtPropostaAluno').innerHTML = `"${caso.texto}"`;
             
+            // Texto limpo (sem grifos) antes de revelar
+            document.getElementById('txtPropostaAluno').innerHTML = `"${caso.textoLimpo}"`;
+            
+            // Limpar campos de palpite das equipes ao mudar de caso
+            document.getElementById('palpiteEquipe1').value = "";
+            document.getElementById('palpiteEquipe2').value = "";
+
             // Resetar painel direito
             document.getElementById('painelOculto').classList.remove('hidden');
             document.getElementById('painelRevelado').classList.add('hidden');
@@ -189,6 +242,9 @@
 
         function revelarDiagnostico() {
             const caso = casosAuditoria[indiceAtual];
+
+            // Mostrar texto com os grifos e pegadinhas
+            document.getElementById('txtPropostaAluno').innerHTML = `"${caso.textoRevelado}"`;
 
             document.getElementById('painelOculto').classList.add('hidden');
             document.getElementById('painelRevelado').classList.remove('hidden');
@@ -219,6 +275,25 @@
         function proximoCaso() {
             indiceAtual = (indiceAtual + 1) % casosAuditoria.length;
             carregarCaso(indiceAtual);
+        }
+
+        function alterarPontos(equipe, valor) {
+            if (equipe === 1) {
+                score1 = Math.max(0, score1 + valor);
+                document.getElementById('pontosEquipe1').innerText = score1;
+            } else {
+                score2 = Math.max(0, score2 + valor);
+                document.getElementById('pontosEquipe2').innerText = score2;
+            }
+        }
+
+        function zerarPlacar() {
+            score1 = 0;
+            score2 = 0;
+            document.getElementById('pontosEquipe1').innerText = 0;
+            document.getElementById('pontosEquipe2').innerText = 0;
+            document.getElementById('palpiteEquipe1').value = "";
+            document.getElementById('palpiteEquipe2').value = "";
         }
 
         // Inicializar com o primeiro caso
