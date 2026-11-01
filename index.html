@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Interativo C5 - ENEM (Correção ao Vivo)</title>
-    <!-- Tailwind CSS para um design limpo e profissional -->
+    <title>Laboratório de Auditoria C5 - ENEM</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,135 +16,81 @@
 
     <!-- CABEÇALHO -->
     <header class="bg-slate-800 border-b border-slate-700 shadow-md py-4 px-6">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div>
-                <span class="bg-indigo-500/20 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Ferramenta para Sala de Aula</span>
-                <h1 class="text-2xl font-bold text-white mt-1">Painel de Análise C5 (ENEM)</h1>
-                <p class="text-xs text-slate-400">Digite a proposta que o aluno leu do papel para avaliar na hora com a turma.</p>
+                <span class="bg-indigo-500/20 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Dinâmica de Sala de Aula</span>
+                <h1 class="text-2xl font-bold text-white mt-1">🕵️‍♂️ Caça aos Erros na C5 (ENEM)</h1>
+                <p class="text-xs text-slate-400">Analise a proposta projetada, descubra a falha com a turma e revele o diagnóstico.</p>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="carregarExemplo()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg transition font-medium">
-                    💡 Carregar Exemplo Prático
-                </button>
-                <button onclick="limparCampos()" class="text-xs bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 px-3 py-2 rounded-lg transition font-medium">
-                    🧹 Limpar Tudo
+                <span id="contadorCasos" class="text-xs bg-slate-700 text-slate-300 font-medium px-3 py-1.5 rounded-lg">Caso 1 de 6</span>
+                <button onclick="proximoCaso()" class="text-xs bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-lg transition shadow-md">
+                    Próximo Caso ➔
                 </button>
             </div>
         </div>
     </header>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main class="max-w-7xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto">
+    <main class="max-w-6xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto">
         
-        <!-- COLUNA ESQUERDA: FORMULÁRIO DE ENTRADA -->
-        <section class="lg:col-span-7 bg-slate-800 border border-slate-700 rounded-2xl p-5 md:p-6 shadow-xl flex flex-col justify-between">
+        <!-- COLUNA ESQUERDA: PROPOSTA DO "ALUNO FICTÍCIO" PARA AUDITORIA -->
+        <section class="lg:col-span-7 bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
             <div>
-                <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-                    Dados da Proposta do Aluno (ditada do caderno)
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs uppercase tracking-wider font-semibold text-indigo-400">Tema em Discussão:</span>
+                    <span id="txtEixo" class="text-xs bg-slate-900 px-3 py-1 rounded-full text-slate-300 border border-slate-700">Educação / Evasão Escolar</span>
+                </div>
+                
+                <h2 id="txtTituloTema" class="text-xl font-bold text-white mb-6">
+                    Caminhos para combater a evasão escolar no ensino médio
                 </h2>
 
-                <div class="space-y-4">
-                    <!-- Tema com Botão de Sorteio -->
-                    <div>
-                        <div class="flex justify-between items-center mb-1">
-                            <label class="text-xs font-medium text-slate-300">Eixo / Tema da Redação:</label>
-                            <button onclick="sortearTema()" class="text-xs bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 px-2.5 py-1 rounded-md transition font-medium flex items-center gap-1">
-                                🎲 Sortear Tema Aleatório
-                            </button>
-                        </div>
-                        <input type="text" id="inputTema" placeholder="Clique em 'Sortear Tema Aleatório' ou digite..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <!-- 1. Agente -->
-                    <div>
-                        <label class="text-xs font-medium text-slate-300 mb-1 block">1. AGENTE (Quem vai fazer? Órgão governamental ideal):</label>
-                        <input type="text" id="inputAgente" placeholder="Ex: Ministério da Educação, Ministério da Justiça..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <!-- 2. Ação -->
-                    <div>
-                        <label class="text-xs font-medium text-slate-300 mb-1 block">2. AÇÃO (O que deve ser feito? Evite termos vagos):</label>
-                        <input type="text" id="inputAcao" placeholder="Ex: Expandir o programa de escolas em tempo integral..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <!-- 3. Meio / Modo -->
-                    <div>
-                        <label class="text-xs font-medium text-slate-300 mb-1 block">3. MEIO / MODO (Através de quais ferramentas, verbas ou ações práticas):</label>
-                        <input type="text" id="inputMeio" placeholder="Ex: Por meio do repasse de verbas do FNDE e parceria com estados..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <!-- 4. Efeito -->
-                    <div>
-                        <label class="text-xs font-medium text-slate-300 mb-1 block">4. EFEITO (Para qual finalidade social? Impacto esperado):</label>
-                        <input type="text" id="inputEfeito" placeholder="Ex: A fim de reduzir a evasão escolar e garantir a permanência..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
-
-                    <!-- 5. Detalhamento -->
-                    <div>
-                        <label class="text-xs font-medium text-slate-300 mb-1 block">5. DETALHAMENTO (Repertório, lei, justificativa ou órgão auxiliar):</label>
-                        <input type="text" id="inputDetalhamento" placeholder="Ex: Conforme assegurado pelo Artigo 205 da Constituição Federal..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
-                    </div>
+                <div class="bg-slate-900 border border-slate-700 rounded-xl p-5 mb-6 relative">
+                    <span class="absolute -top-3 left-4 bg-indigo-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded">Texto do Aluno no Papel</span>
+                    <p id="txtPropostaAluno" class="text-sm md:text-base text-slate-200 leading-relaxed italic">
+                        "Portanto, cabe ao <span class="text-amber-400 font-semibold">Ministério da Justiça</span> implementar oficinas de reforço escolar nas periferias, por meio de parcerias com ONGs locais, a fim de garantir que os jovens permaneçam estudando. Afinal, a educação transforma vidas."
+                    </p>
                 </div>
             </div>
 
-            <!-- Botão de Análise -->
-            <button onclick="analisarProposta()" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
-                🔍 Analisar Proposta com a Turma
+            <!-- Botão de Revelar Diagnóstico -->
+            <button onclick="revelarDiagnostico()" id="btnRevelar" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 px-6 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
+                🔍 Revelar o Diagnóstico da Proposta (Onde está o erro?)
             </button>
         </section>
 
-        <!-- COLUNA DIREITA: PAINEL DE FEEDBACK / RESULTADO -->
+        <!-- COLUNA DIREITA: PAINEL DE AUDITORIA E NOTA -->
         <section class="lg:col-span-5 flex flex-col gap-6">
             
-            <!-- Caixa de Resultado do Diagnóstico -->
-            <div id="painelResultado" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex-1 flex flex-col justify-between">
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex-1 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-4">
-                        <h3 class="font-semibold text-white flex items-center gap-2">
-                            <span>📊 Veredito do Corretor ENEM</span>
-                        </h3>
-                        <span id="badgeNota" class="text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300">Aguardando entrada</span>
+                        <h3 class="font-semibold text-white text-sm">Auditoria Técnica da Competência 5</h3>
+                        <span id="badgeStatus" class="text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300">Aguardando revelação</span>
                     </div>
 
-                    <!-- Mensagem Inicial -->
-                    <div id="resultadoVazio" class="text-center py-12 text-slate-400">
-                        <p class="text-3xl mb-2">👩‍🏫</p>
-                        <p class="text-sm">Preencha os campos ao lado com a proposta lida pelo aluno para ver a auditoria detalhada na lousa.</p>
+                    <!-- Estado Oculto Inicial -->
+                    <div id="painelOculto" class="text-center py-12 text-slate-400">
+                        <p class="text-3xl mb-2">🧑‍⚖️</p>
+                        <p class="text-sm">Peça para a turma analisar o texto ao lado e descobrir o que está incorreto. Depois, clique no botão verde para auditar!</p>
                     </div>
 
-                    <!-- Relatório Preenchido (Oculto inicialmente) -->
-                    <div id="relatorioAnalise" class="hidden space-y-4">
-                        <!-- Score Card -->
-                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
-                            <span class="text-xs text-slate-400 block uppercase tracking-wider">Pontuação Estimada C5</span>
-                            <div class="flex items-baseline gap-2 mt-1">
-                                <span id="txtPontos" class="text-3xl font-extrabold text-white">0</span>
-                                <span class="text-sm text-slate-400">/ 200 pontos</span>
-                            </div>
+                    <!-- Estado Revelado (Relatório Crítico) -->
+                    <div id="painelRevelado" class="hidden space-y-3">
+                        <div class="bg-slate-900 p-3 rounded-xl border border-slate-700 flex justify-between items-center">
+                            <span class="text-xs text-slate-400 uppercase">Nota C5 Simulada:</span>
+                            <span id="txtNotaCaso" class="text-xl font-black text-rose-400">80 / 200</span>
                         </div>
 
-                        <!-- Feedback dos Elementos -->
-                        <div class="space-y-2">
-                            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Análise Crítica por Critério:</h4>
-                            <div id="listaFeedbackItens" class="space-y-2 text-xs">
-                                <!-- Preenchido via JavaScript -->
-                            </div>
+                        <div id="detalhesAuditoria" class="space-y-2 text-xs">
+                            <!-- Preenchido via JavaScript -->
                         </div>
                     </div>
                 </div>
 
-                <!-- Botão de Histórico -->
-                <button onclick="salvarNoHistorico()" id="btnSalvar" class="hidden mt-4 w-full bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-medium py-2.5 px-4 rounded-xl transition">
-                    📌 Salvar no Histórico da Aula
-                </button>
-            </div>
-
-            <!-- Bloco de Histórico Recente da Aula -->
-            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-xl">
-                <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Histórico de Propostas Analisadas Hoje</h4>
-                <div id="historicoContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1 text-xs text-slate-300">
-                    <p class="text-slate-500 italic">Nenhuma proposta salva nesta aula ainda.</p>
+                <div class="mt-4 pt-4 border-t border-slate-700 text-center">
+                    <p class="text-[11px] text-slate-400">💡 Dica para a professora: pergunte à turma qual ministério deveria estar no lugar do erro antes de revelar.</p>
                 </div>
             </div>
 
@@ -154,191 +100,129 @@
 
     <!-- RODAPÉ -->
     <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800 mt-6">
-        Ferramenta desenvolvida para apoio pedagógico em sala de aula — Foco na Competência 5 do ENEM.
+        Laboratório Interativo de Redação — Foco no Domínio dos Ministérios e Atribuições (ENEM).
     </footer>
 
-    <!-- SCRIPT DE ANÁLISE E BANCO DE TEMAS -->
+    <!-- SCRIPT DA DINÂMICA DE CASOS -->
     <script>
-        // Vasto banco de temas do ENEM para sorteio aleatório
-        const bancoTemasENEM = [
-            // Educação e Cultura
-            "Desafios para a formação educacional de surdos no Brasil",
-            "Caminhos para combater a evasão escolar no ensino médio",
-            "A importância da leitura e do acesso aos livros na formação cidadã",
-            "O papel da escola na inclusão digital de comunidades periféricas",
-            "A valorização do professor e os gargalos da carreira docente no país",
-            "Educação financeira nas escolas: desafios para o consumo consciente",
-            "A importância do patrimônio histórico e cultural na identidade nacional",
-
-            // Saúde e Bem-Estar
-            "Caminhos para combater o estigma associado às doenças mentais",
-            "O avanço da obesidade infantil e os desafios da reeducação alimentar",
-            "Doações de órgãos no Brasil: desinformação e barreiras culturais",
-            "A persistência da automedicação na sociedade brasileira contemporânea",
-            "Desafios para o envelhecimento populacional e o suporte à terceira idade",
-            "O combate às arboviroses (Dengue, Zika e Chikungunya) e a responsabilidade pública",
-            "A garantia de saneamento básico como direito fundamental à saúde",
-
-            // Tecnologia e Sociedade
-            "Os impactos dos algoritmos de redes sociais na polarização política",
-            "A manipulação do comportamento do usuário pelo controle de dados na internet",
-            "Inclusão digital da terceira idade no Brasil contemporâneo",
-            "A difusão de fake news e seus impactos na saúde pública e democrática",
-            "Cibersegurança e os desafios da proteção de dados pessoais dos cidadãos",
-            "A automação do trabalho e os impactos da inteligência artificial na empregabilidade",
-
-            // Meio Ambiente e Sustentabilidade
-            "Alternativas para o descarte adequado do lixo eletrônico nas cidades",
-            "Os impactos socioambientais do consumo excessivo de plástico",
-            "A preservação dos biomas brasileiros frente ao avanço do agronegócio predatório",
-            "Escassez hídrica e os desafios da gestão sustentável da água no Brasil",
-            "Mobilidade urbana sustentável: gargalos e soluções nas grandes metrópoles",
-            "A transição energética e o uso de fontes limpas na matriz brasileira",
-
-            // Cidadania, Diretos e Sociedade
-            "Os caminhos para combater a invisibilidade social gerada pela falta de registro civil",
-            "A persistência da violência contra a mulher e os desafios da rede de proteção",
-            "O combate ao trabalho análogo à escravidão no Brasil moderno",
-            "Democratização do acesso ao esporte e lazer como ferramenta de inclusão social",
-            "A reinserção social de ex-detentos no mercado de trabalho brasileiro",
-            "O papel das periferias na produção cultural e econômica das grandes cidades",
-            "A proteção dos direitos da infância frente à exploração do trabalho infantil",
-            "Desigualdade social e a concentração de renda nas metrópoles brasileiras",
-            "Caminhos para a erradicação do preconceito linguístico e regional no país",
-            "Os desafios para a garantia da segurança viária e redução de acidentes nas rodovias"
+        const casosAuditoria = [
+            {
+                eixo: "Educação / Evasão Escolar",
+                titulo: "Caminhos para combater a evasão escolar no ensino médio",
+                texto: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério da Justiça</span> implementar oficinas de reforço escolar nas periferias, por meio de parcerias com ONGs locais, a fim de garantir que os jovens permaneçam estudando. Afinal, a educação transforma vidas.',
+                nota: "80 / 200",
+                statusClass: "bg-rose-500/20 text-rose-300 border border-rose-500/30",
+                statusText: "Contém Erro Crítico (Agente Inadequado)",
+                auditoria: [
+                    { icone: "❌", titulo: "Agente Incorreto (Ministério da Justiça)", desc: "O Ministério da Justiça cuida da segurança pública, sistema penitenciário e direitos do consumidor. Quem cuida de escolas e reforço educacional é o <strong>Ministério da Educação (MEC)</strong>. Perde 40 pontos no agente." },
+                    { icone: "✅", titulo: "Ação Válida", desc: "A ação de 'implementar oficinas de reforço escolar' é concreta e estruturada." },
+                    { icone: "✅", titulo: "Meio Válido", desc: "Uso de parcerias com ONGs locais detalha bem o modo de execução." },
+                    { icone: "✅", titulo: "Efeito Presente", desc: "Garantir a permanência escolar cumpre o impacto social exigido." },
+                    { icone: "❌", titulo: "Ausência de Detalhamento", desc: "A frase final ('Afinal, a educação transforma vidas') é um argumento vazio/lugar-comum, não um detalhamento válido (como repertório sociocultural produtivo ou citação de lei). Perde mais 40 pontos." }
+                ]
+            },
+            {
+                eixo: "Saúde Pública / Saúde Mental",
+                titulo: "Caminhos para combater o estigma das doenças mentais",
+                texto: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério da Saúde</span> <span class="text-amber-400 font-semibold underline">conscientizar a população</span> sobre a depressão, por meio de postagens na internet, com o objetivo de reduzir o preconceito na sociedade.',
+                nota: "80 / 200",
+                statusClass: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
+                statusText: "Atenção: Ação Vaga e Falta Detalhamento",
+                auditoria: [
+                    { icone: "✅", titulo: "Agente Perfeito (Ministério da Saúde)", desc: "Órgão legítimo e com total competência legal sobre a saúde mental e os CAPS." },
+                    { icone: "⚠️", titulo: "Ação Vaga ('Conscientizar')", desc: "O ENEM penaliza severamente o verbo 'conscientizar' ou 'divulgar' isolado como ação principal, pois soa abstrato. O correto seria 'ampliar campanhas institucionais articuladas e expandir os atendimentos psicológicos nos postos'." },
+                    { icone: "✅", titulo: "Meio Válido", desc: "Uso de postagens/mídias digitais como canal de difusão." },
+                    { icone: "✅", titulo: "Efeito Presente", desc: "Reduzir o preconceito e estigma." },
+                    { icone: "❌", titulo: "Sem Detalhamento", desc: "Não há lei, citação de órgão auxiliar (como a OMS) ou justificativa aprofundada." }
+                ]
+            },
+            {
+                eixo: "Tecnologia / Inclusão Digital",
+                titulo: "Inclusão digital da terceira idade no Brasil contemporâneo",
+                texto: 'Portanto, cabe ao <span class="text-amber-400 font-semibold underline">Ministério das Comunicações</span> criar centros de alfabetização digital para idosos, por meio do repasse de verbas federais para os municípios, a fim de promover a cidadania tecnológica. Isso conforme a Constituição.',
+                nota: "120 / 200",
+                statusClass: "bg-amber-500/20 text-amber-300 border border-amber-500/30",
+                statusText: "Bom, mas Detalhamento Genérico",
+                auditoria: [
+                    { icone: "✅", titulo: "Agente Correto (Ministério das Comunicações)", desc: "Perfeito! O MCom é o órgão responsável pelas telecomunicações, conectividade e inclusão digital no país." },
+                    { icone: "✅", titulo: "Ação Concreta", desc: "Criar centros de alfabetização digital é uma intervenção estruturada e direta." },
+                    { icone: "✅", titulo: "Meio Válido", desc: "Repasse de verbas federais via municipalidades." },
+                    { icone: "✅", titulo: "Efeito Presente", desc: "Promover a cidadania tecnológica." },
+                    { icone: "⚠️", titulo: "Detalhamento Genérico ('Isso conforme a Constituição')", desc: "A banca do ENEM exige que o repertório de detalhamento seja <strong>legitimado e produtivo</strong>. Citar 'a Constituição' sem especificar o artigo ou o princípio exato é considerado detalhamento genérico e pode receber desconto." }
+                ]
+            },
+            {
+                eixo: "Meio Ambiente / Resíduos Sólidos",
+                titulo: "Alternativas para o descarte adequado do lixo eletrônico",
+                texto: 'Portanto, o <span class="text-amber-400 font-semibold underline">Governo Federal</span> deve implantar pontos de coleta seletiva de eletrônicos, por meio de parcerias com empresas de tecnologia, visando preservar o meio ambiente.',
+                nota: "80 / 200",
+                statusClass: "bg-rose-500/20 text-rose-300 border border-rose-500/30",
+                statusText: "Erro Crítico: Agente Genérico",
+                auditoria: [
+                    { icone: "❌", titulo: "Agente Genérico ('Governo Federal')", desc: "Erro clássico! O ENEM não aceita termos amplos como 'o governo', 'as autoridades' ou 'o Estado'. É obrigatório especificar o ministério ou órgão executor específico (neste caso, o <strong>Ministério do Meio Ambiente e Mudança do Clima</strong>)." },
+                    { icone: "✅", titulo: "Ação Concreta", desc: "Implantar pontos de coleta seletiva." },
+                    { icone: "✅", titulo: "Meio Válido", desc: "Parcerias com o setor privado/empresas de tecnologia." },
+                    { icon: "✅", titulo: "Efeito Presente", desc: "Preservar o ecossistema." },
+                    { icone: "❌", titulo: "Sem Detalhamento", desc: "Faltou o 5º elemento obrigatório." }
+                ]
+            }
         ];
 
-        let propostasSalvas = [];
+        let indiceAtual = 0;
 
-        function sortearTema() {
-            const randomIndex = Math.floor(Math.random() * bancoTemasENEM.length);
-            document.getElementById('inputTema').value = bancoTemasENEM[randomIndex];
-        }
-
-        function carregarExemplo() {
-            document.getElementById('inputTema').value = "Desigualdade Social e Concentração de Renda";
-            document.getElementById('inputAgente').value = "Ministério do Desenvolvimento e Assistência Social (MDS)";
-            document.getElementById('inputAcao').value = "expandir os programas de transferência de renda associados a oficinas profissionalizantes";
-            document.getElementById('inputMeio').value = "por meio do aumento do repasse de verbas do CadÚnico em parceria com o Sistema S";
-            document.getElementById('inputEfeito').value = "a fim de mitigar a vulnerabilidade e inserir esses cidadãos no mercado de trabalho formal";
-            document.getElementById('inputDetalhamento').value = "conforme preconiza o artigo 3º da Constituição Federal sobre erradicar a pobreza";
-            analisarProposta();
-        }
-
-        function limparCampos() {
-            document.getElementById('inputTema').value = "";
-            document.getElementById('inputAgente').value = "";
-            document.getElementById('inputAcao').value = "";
-            document.getElementById('inputMeio').value = "";
-            document.getElementById('inputEfeito').value = "";
-            document.getElementById('inputDetalhamento').value = "";
+        function carregarCaso(index) {
+            const caso = casosAuditoria[index];
+            document.getElementById('contadorCasos').innerText = `Caso ${index + 1} de ${casosAuditoria.length}`;
+            document.getElementById('txtEixo').innerText = caso.eixo;
+            document.getElementById('txtTituloTema').innerText = caso.titulo;
+            document.getElementById('txtPropostaAluno').innerHTML = `"${caso.texto}"`;
             
-            document.getElementById('resultadoVazio').classList.remove('hidden');
-            document.getElementById('relatorioAnalise').classList.add('hidden');
-            document.getElementById('btnSalvar').classList.add('hidden');
-            document.getElementById('badgeNota').className = "text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300";
-            document.getElementById('badgeNota').innerText = "Aguardando entrada";
-        }
-
-        function analisarProposta() {
-            const tema = document.getElementById('inputTema').value.trim();
-            const agente = document.getElementById('inputAgente').value.trim();
-            const acao = document.getElementById('inputAcao').value.trim();
-            const meio = document.getElementById('inputMeio').value.trim();
-            const efeito = document.getElementById('inputEfeito').value.trim();
-            const detalhamento = document.getElementById('inputDetalhamento').value.trim();
-
-            if (!agente || !acao || !meio || !efeito) {
-                alert("Por favor, preencha pelo menos o Agente, a Ação, o Meio e o Efeito para realizar a auditoria.");
-                return;
-            }
-
-            let elementosPresentes = 0;
-            let feedbackHTML = "";
-            let acoesVagas = ["conscientizar", "ajudar", "fazer palestras", "melhorar", "mudar", "acabar"];
-            let acaoVagaEncontrada = acoesVagas.some(termo => acao.toLowerCase().includes(termo));
-
-            // 1. Agente
-            if (agente.length > 3) {
-                elementosPresentes++;
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Agente Válido:</strong> Órgão legítimo identificado.</div></div>`;
-            } else {
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-rose-500/30 flex items-start gap-2"><span>❌</span><div><strong class="text-rose-400">Agente Insuficiente:</strong> Muito vago (evite dizer apenas "o governo").</div></div>`;
-            }
-
-            // 2. Ação
-            if (acao.length > 5 && !acaoVagaEncontrada) {
-                elementosPresentes++;
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Ação Concreta:</strong> Boa estruturação de intervenção.</div></div>`;
-            } else {
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-amber-500/30 flex items-start gap-2"><span>⚠️</span><div><strong class="text-amber-400">Ação Vaga:</strong> O ENEM penaliza verbos como 'conscientizar' ou 'ajudar' isolados.</div></div>`;
-            }
-
-            // 3. Meio/Modo
-            if (meio.toLowerCase().includes("por meio") || meio.toLowerCase().includes("por intermédio") || meio.length > 8) {
-                elementosPresentes++;
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Meio/Modo Válido:</strong> Apresenta a ferramenta de execução.</div></div>`;
-            } else {
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-rose-500/30 flex items-start gap-2"><span>❌</span><div><strong class="text-rose-400">Meio Ausente:</strong> Falta detalhar o 'como' de forma prática.</div></div>`;
-            }
-
-            // 4. Efeito
-            if (efeito.toLowerCase().includes("a fim de") || efeito.toLowerCase().includes("para") || efeito.length > 8) {
-                elementosPresentes++;
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Efeito Válido:</strong> Impacto social alinhado.</div></div>`;
-            } else {
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-rose-500/30 flex items-start gap-2"><span>❌</span><div><strong class="text-rose-400">Efeito Incompleto:</strong> Falta a finalidade clara da intervenção.</div></div>`;
-            }
-
-            // 5. Detalhamento
-            if (detalhamento.length > 5) {
-                elementosPresentes++;
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Detalhamento Presente:</strong> Enriquece a proposta.</div></div>`;
-            } else {
-                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 flex items-start gap-2"><span>ℹ️</span><div><strong class="text-slate-400">Sem Detalhamento:</strong> Faltou um repertório coringa ou justificativa extra (perde 40 pontos).</div></div>`;
-            }
-
-            // Cálculo da Nota Simulada
-            let notaFinal = elementosPresentes * 40;
-            if (acaoVagaEncontrada && notaFinal >= 40) notaFinal -= 40;
-
-            document.getElementById('resultadoVazio').classList.add('hidden');
-            document.getElementById('relatorioAnalise').classList.remove('hidden');
-            document.getElementById('btnSalvar').classList.remove('hidden');
+            // Resetar painel direito
+            document.getElementById('painelOculto').classList.remove('hidden');
+            document.getElementById('painelRevelado').classList.add('hidden');
+            document.getElementById('btnRevelar').classList.remove('hidden');
             
-            document.getElementById('txtPontos').innerText = notaFinal;
-            document.getElementById('listaFeedbackItens').innerHTML = feedbackHTML;
-
-            const badge = document.getElementById('badgeNota');
-            if (notaFinal === 200) {
-                badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
-                badge.innerText = "Nota 200 (Perfeito!)";
-            } else if (notaFinal >= 120) {
-                badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30";
-                badge.innerText = "Bom, mas pode melhorar";
-            } else {
-                badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30";
-                badge.innerText = "Insuficiente (Faltam elementos)";
-            }
+            const badge = document.getElementById('badgeStatus');
+            badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300";
+            badge.innerText = "Aguardando revelação";
         }
 
-        function salvarNoHistorico() {
-            const tema = document.getElementById('inputTema').value || "Tema livre";
-            const nota = document.getElementById('txtPontos').innerText;
+        function revelarDiagnostico() {
+            const caso = casosAuditoria[indiceAtual];
 
-            propostasSalvas.unshift({ tema, nota });
+            document.getElementById('painelOculto').classList.add('hidden');
+            document.getElementById('painelRevelado').classList.remove('hidden');
+            document.getElementById('btnRevelar').classList.add('hidden');
 
-            let htmlHist = "";
-            propostasSalvas.forEach((item, idx) => {
-                htmlHist += `<div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex justify-between items-center">
-                    <span class="truncate max-w-[180px]" title="${item.tema}">#${idx+1} - ${item.tema}</span>
-                    <span class="font-bold text-indigo-400">${item.nota} pts</span>
-                </div>`;
+            document.getElementById('txtNotaCaso').innerText = caso.nota;
+            
+            const badge = document.getElementById('badgeStatus');
+            badge.className = `text-xs px-3 py-1.5 rounded-full font-bold ${caso.statusClass}`;
+            badge.innerText = caso.statusText;
+
+            let htmlAuditoria = "";
+            caso.auditoria.forEach(item => {
+                htmlAuditoria += `
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 flex items-start gap-2">
+                        <span class="text-base">${item.icone}</span>
+                        <div>
+                            <strong class="text-white block mb-0.5">${item.titulo}</strong>
+                            <p class="text-slate-300 leading-relaxed">${item.desc}</p>
+                        </div>
+                    </div>
+                `;
             });
 
-            document.getElementById('historicoContainer').innerHTML = htmlHist;
-            alert("Proposta salva no painel da aula!");
+            document.getElementById('detalhesAuditoria').innerHTML = htmlAuditoria;
         }
+
+        function proximoCaso() {
+            indiceAtual = (indiceAtual + 1) % casosAuditoria.length;
+            carregarCaso(indiceAtual);
+        }
+
+        // Inicializar com o primeiro caso
+        carregarCaso(0);
     </script>
 </body>
 </html>
