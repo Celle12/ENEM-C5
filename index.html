@@ -45,39 +45,44 @@
                 </h2>
 
                 <div class="space-y-4">
-                    <!-- Tema -->
+                    <!-- Tema com Botão de Sorteio -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">Eixo / Tema da Redação:</label>
-                        <input type="text" id="inputTema" placeholder="Ex: Desigualdade social, evasão escolar, saúde mental..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                        <div class="flex justify-between items-center mb-1">
+                            <label class="text-xs font-medium text-slate-300">Eixo / Tema da Redação:</label>
+                            <button onclick="sortearTema()" class="text-xs bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 px-2.5 py-1 rounded-md transition font-medium flex items-center gap-1">
+                                🎲 Sortear Tema Aleatório
+                            </button>
+                        </div>
+                        <input type="text" id="inputTema" placeholder="Clique em 'Sortear Tema Aleatório' ou digite..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                     </div>
 
                     <!-- 1. Agente -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">1. AGENTE (Quem vai fazer? Órgão governamental ideal):</label>
+                        <label class="text-xs font-medium text-slate-300 mb-1 block">1. AGENTE (Quem vai fazer? Órgão governamental ideal):</label>
                         <input type="text" id="inputAgente" placeholder="Ex: Ministério da Educação, Ministério da Justiça..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                     </div>
 
                     <!-- 2. Ação -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">2. AÇÃO (O que deve ser feito? Evite termos vagos):</label>
+                        <label class="text-xs font-medium text-slate-300 mb-1 block">2. AÇÃO (O que deve ser feito? Evite termos vagos):</label>
                         <input type="text" id="inputAcao" placeholder="Ex: Expandir o programa de escolas em tempo integral..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                     </div>
 
                     <!-- 3. Meio / Modo -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">3. MEIO / MODO (Através de quais ferramentas, verbas ou ações práticas):</label>
+                        <label class="text-xs font-medium text-slate-300 mb-1 block">3. MEIO / MODO (Através de quais ferramentas, verbas ou ações práticas):</label>
                         <input type="text" id="inputMeio" placeholder="Ex: Por meio do repasse de verbas do FNDE e parceria com estados..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                     </div>
 
                     <!-- 4. Efeito -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">4. EFEITO (Para qual finalidade social? Impacto esperado):</label>
+                        <label class="text-xs font-medium text-slate-300 mb-1 block">4. EFEITO (Para qual finalidade social? Impacto esperado):</label>
                         <input type="text" id="inputEfeito" placeholder="Ex: A fim de reduzir a evasão escolar e garantir a permanência..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                     </div>
 
                     <!-- 5. Detalhamento -->
                     <div>
-                        <label class="block text-xs font-medium text-slate-300 mb-1">5. DETALHAMENTO (Repertório, lei, justificativa ou órgão auxiliar):</label>
+                        <label class="text-xs font-medium text-slate-300 mb-1 block">5. DETALHAMENTO (Repertório, lei, justificativa ou órgão auxiliar):</label>
                         <input type="text" id="inputDetalhamento" placeholder="Ex: Conforme assegurado pelo Artigo 205 da Constituição Federal..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
                     </div>
                 </div>
@@ -97,7 +102,7 @@
                 <div>
                     <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-4">
                         <h3 class="font-semibold text-white flex items-center gap-2">
-                            <span>📊 Veredito do Corredor ENEM</span>
+                            <span>📊 Veredito do Corretor ENEM</span>
                         </h3>
                         <span id="badgeNota" class="text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300">Aguardando entrada</span>
                     </div>
@@ -152,9 +157,63 @@
         Ferramenta desenvolvida para apoio pedagógico em sala de aula — Foco na Competência 5 do ENEM.
     </footer>
 
-    <!-- SCRIPT DE ANÁLISE -->
+    <!-- SCRIPT DE ANÁLISE E BANCO DE TEMAS -->
     <script>
+        // Vasto banco de temas do ENEM para sorteio aleatório
+        const bancoTemasENEM = [
+            // Educação e Cultura
+            "Desafios para a formação educacional de surdos no Brasil",
+            "Caminhos para combater a evasão escolar no ensino médio",
+            "A importância da leitura e do acesso aos livros na formação cidadã",
+            "O papel da escola na inclusão digital de comunidades periféricas",
+            "A valorização do professor e os gargalos da carreira docente no país",
+            "Educação financeira nas escolas: desafios para o consumo consciente",
+            "A importância do patrimônio histórico e cultural na identidade nacional",
+
+            // Saúde e Bem-Estar
+            "Caminhos para combater o estigma associado às doenças mentais",
+            "O avanço da obesidade infantil e os desafios da reeducação alimentar",
+            "Doações de órgãos no Brasil: desinformação e barreiras culturais",
+            "A persistência da automedicação na sociedade brasileira contemporânea",
+            "Desafios para o envelhecimento populacional e o suporte à terceira idade",
+            "O combate às arboviroses (Dengue, Zika e Chikungunya) e a responsabilidade pública",
+            "A garantia de saneamento básico como direito fundamental à saúde",
+
+            // Tecnologia e Sociedade
+            "Os impactos dos algoritmos de redes sociais na polarização política",
+            "A manipulação do comportamento do usuário pelo controle de dados na internet",
+            "Inclusão digital da terceira idade no Brasil contemporâneo",
+            "A difusão de fake news e seus impactos na saúde pública e democrática",
+            "Cibersegurança e os desafios da proteção de dados pessoais dos cidadãos",
+            "A automação do trabalho e os impactos da inteligência artificial na empregabilidade",
+
+            // Meio Ambiente e Sustentabilidade
+            "Alternativas para o descarte adequado do lixo eletrônico nas cidades",
+            "Os impactos socioambientais do consumo excessivo de plástico",
+            "A preservação dos biomas brasileiros frente ao avanço do agronegócio predatório",
+            "Escassez hídrica e os desafios da gestão sustentável da água no Brasil",
+            "Mobilidade urbana sustentável: gargalos e soluções nas grandes metrópoles",
+            "A transição energética e o uso de fontes limpas na matriz brasileira",
+
+            // Cidadania, Diretos e Sociedade
+            "Os caminhos para combater a invisibilidade social gerada pela falta de registro civil",
+            "A persistência da violência contra a mulher e os desafios da rede de proteção",
+            "O combate ao trabalho análogo à escravidão no Brasil moderno",
+            "Democratização do acesso ao esporte e lazer como ferramenta de inclusão social",
+            "A reinserção social de ex-detentos no mercado de trabalho brasileiro",
+            "O papel das periferias na produção cultural e econômica das grandes cidades",
+            "A proteção dos direitos da infância frente à exploração do trabalho infantil",
+            "Desigualdade social e a concentração de renda nas metrópoles brasileiras",
+            "Caminhos para a erradicação do preconceito linguístico e regional no país",
+            "Os desafios para a garantia da segurança viária e redução de acidentes nas rodovias"
+        ];
+
         let propostasSalvas = [];
+
+        function sortearTema() {
+            const randomIndex = Math.floor(Math.random() * bancoTemasENEM.length);
+            document.getElementById('inputTema').value = bancoTemasENEM[randomIndex];
+        }
 
         function carregarExemplo() {
             document.getElementById('inputTema').value = "Desigualdade Social e Concentração de Renda";
@@ -196,7 +255,8 @@
 
             let elementosPresentes = 0;
             let feedbackHTML = "";
-            let penalizacoes = [];
+            let acoesVagas = ["conscientizar", "ajudar", "fazer palestras", "melhorar", "mudar", "acabar"];
+            let acaoVagaEncontrada = acoesVagas.some(termo => acao.toLowerCase().includes(termo));
 
             // 1. Agente
             if (agente.length > 3) {
@@ -207,14 +267,10 @@
             }
 
             // 2. Ação
-            const acoesVagas = ["conscientizar", "ajudar", "fazer palestras", "melhorar", "mudar", "acabar"];
-            let acaoVagaEncontrada = acoesVagas.some(termo => acao.toLowerCase().includes(termo));
-            
             if (acao.length > 5 && !acaoVagaEncontrada) {
                 elementosPresentes++;
                 feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Ação Concreta:</strong> Boa estruturação de intervenção.</div></div>`;
             } else {
-                penalizacoes.push("Ação considerada vaga (ex: conscientizar/palestrar sem intervenção estrutural).");
                 feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-amber-500/30 flex items-start gap-2"><span>⚠️</span><div><strong class="text-amber-400">Ação Vaga:</strong> O ENEM penaliza verbos como 'conscientizar' ou 'ajudar' isolados.</div></div>`;
             }
 
@@ -242,11 +298,10 @@
                 feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 flex items-start gap-2"><span>ℹ️</span><div><strong class="text-slate-400">Sem Detalhamento:</strong> Faltou um repertório coringa ou justificativa extra (perde 40 pontos).</div></div>`;
             }
 
-            // Cálculo da Nota Simulada (Cada elemento vale 40 pts, total 200)
+            // Cálculo da Nota Simulada
             let notaFinal = elementosPresentes * 40;
-            if (acaoVagaEncontrada && notaFinal >= 40) notaFinal -= 40; // Penalidade por vaguidade
+            if (acaoVagaEncontrada && notaFinal >= 40) notaFinal -= 40;
 
-            // Exibir na tela
             document.getElementById('resultadoVazio').classList.add('hidden');
             document.getElementById('relatorioAnalise').classList.remove('hidden');
             document.getElementById('btnSalvar').classList.remove('hidden');
