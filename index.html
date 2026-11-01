@@ -1,570 +1,288 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="h-full">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Proposta de Intervenção ENEM - Aulas de Redação</title>
-    <!-- Tailwind CSS para design moderno e responsivo -->
+    <title>Painel Interativo C5 - ENEM (Correção ao Vivo)</title>
+    <!-- Tailwind CSS para um design limpo e profissional -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Inter para tipografia limpa e legível -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .slide-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .pulse-once {
-            animation: pulseOnce 0.5s ease-in-out;
-        }
-        @keyframes pulseOnce {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 h-full flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
 
-    <!-- Cabeçalho Principal -->
-    <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50 border-b border-indigo-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="bg-indigo-700 p-2.5 rounded-xl shadow-inner text-amber-400">
-                    <i class="fa-solid fa-graduation-cap text-2xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">ENEM Propostas C5</h1>
-                    <p class="text-xs sm:text-sm text-indigo-200">Ferramenta Interativa para Professores de Redação</p>
-                </div>
+    <!-- CABEÇALHO -->
+    <header class="bg-slate-800 border-b border-slate-700 shadow-md py-4 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="bg-indigo-500/20 text-indigo-400 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Ferramenta para Sala de Aula</span>
+                <h1 class="text-2xl font-bold text-white mt-1">Painel de Análise C5 (ENEM)</h1>
+                <p class="text-xs text-slate-400">Digite a proposta que o aluno leu do papel para avaliar na hora com a turma.</p>
             </div>
-            
             <div class="flex items-center gap-3">
-                <button onclick="sortearProposta()" class="bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-4 py-2.5 rounded-xl shadow-md transition-all flex items-center gap-2 transform active:scale-95 text-sm sm:text-base">
-                    <i class="fa-solid fa-dice text-lg"></i> Sortear Desafio Rápido
+                <button onclick="carregarExemplo()" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg transition font-medium">
+                    💡 Carregar Exemplo Prático
                 </button>
-                <button onclick="abrirModalConsulta()" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 font-medium px-4 py-2.5 rounded-xl border border-indigo-700 transition-all flex items-center gap-2 text-sm sm:text-base">
-                    <i class="fa-solid fa-book-bookmark"></i> Banco de Ministérios
+                <button onclick="limparCampos()" class="text-xs bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 px-3 py-2 rounded-lg transition font-medium">
+                    🧹 Limpar Tudo
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Conteúdo Principal -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-
-        <!-- Seletor de Temáticas (Eixos ENEM) -->
-        <section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-slate-900 flex items-center gap-2">
-                    <i class="fa-solid fa-layer-group text-indigo-600"></i> Escolha o Eixo Temático / Problemática:
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 my-auto">
+        
+        <!-- COLUNA ESQUERDA: FORMULÁRIO DE ENTRADA -->
+        <section class="lg:col-span-7 bg-slate-800 border border-slate-700 rounded-2xl p-5 md:p-6 shadow-xl flex flex-col justify-between">
+            <div>
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                    Dados da Proposta do Aluno (ditada do caderno)
                 </h2>
-                <span id="contador-opcoes" class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-full"></span>
+
+                <div class="space-y-4">
+                    <!-- Tema -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">Eixo / Tema da Redação:</label>
+                        <input type="text" id="inputTema" placeholder="Ex: Desigualdade social, evasão escolar, saúde mental..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- 1. Agente -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">1. AGENTE (Quem vai fazer? Órgão governamental ideal):</label>
+                        <input type="text" id="inputAgente" placeholder="Ex: Ministério da Educação, Ministério da Justiça..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- 2. Ação -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">2. AÇÃO (O que deve ser feito? Evite termos vagos):</label>
+                        <input type="text" id="inputAcao" placeholder="Ex: Expandir o programa de escolas em tempo integral..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- 3. Meio / Modo -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">3. MEIO / MODO (Através de quais ferramentas, verbas ou ações práticas):</label>
+                        <input type="text" id="inputMeio" placeholder="Ex: Por meio do repasse de verbas do FNDE e parceria com estados..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- 4. Efeito -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">4. EFEITO (Para qual finalidade social? Impacto esperado):</label>
+                        <input type="text" id="inputEfeito" placeholder="Ex: A fim de reduzir a evasão escolar e garantir a permanência..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+
+                    <!-- 5. Detalhamento -->
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">5. DETALHAMENTO (Repertório, lei, justificativa ou órgão auxiliar):</label>
+                        <input type="text" id="inputDetalhamento" placeholder="Ex: Conforme assegurado pelo Artigo 205 da Constituição Federal..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+                </div>
             </div>
-            <div id="grid-temas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <!-- Inserido dinamicamente via JS -->
-            </div>
+
+            <!-- Botão de Análise -->
+            <button onclick="analisarProposta()" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
+                🔍 Analisar Proposta com a Turma
+            </button>
         </section>
 
-        <!-- Área de Exibição do Slide / Proposta de Intervenção (Os 5 Elementos da C5) -->
-        <section id="secao-resultado" class="space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <!-- COLUNA DIREITA: PAINEL DE FEEDBACK / RESULTADO -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Caixa de Resultado do Diagnóstico -->
+            <div id="painelResultado" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex-1 flex flex-col justify-between">
                 <div>
-                    <span id="badge-tema" class="inline-block text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full mb-2">Tema Selecionado</span>
-                    <h3 id="titulo-ministerio" class="text-2xl font-bold text-slate-900 tracking-tight">Selecione um tema acima</h3>
-                    <p id="subtitulo-ministerio" class="text-sm text-slate-500 mt-1">Escolha o ministério correspondente para gerar a estrutura completa para o slide.</p>
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-4">
+                        <h3 class="font-semibold text-white flex items-center gap-2">
+                            <span>📊 Veredito do Corredor ENEM</span>
+                        </h3>
+                        <span id="badgeNota" class="text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300">Aguardando entrada</span>
+                    </div>
+
+                    <!-- Mensagem Inicial -->
+                    <div id="resultadoVazio" class="text-center py-12 text-slate-400">
+                        <p class="text-3xl mb-2">👩‍🏫</p>
+                        <p class="text-sm">Preencha os campos ao lado com a proposta lida pelo aluno para ver a auditoria detalhada na lousa.</p>
+                    </div>
+
+                    <!-- Relatório Preenchido (Oculto inicialmente) -->
+                    <div id="relatorioAnalise" class="hidden space-y-4">
+                        <!-- Score Card -->
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-700">
+                            <span class="text-xs text-slate-400 block uppercase tracking-wider">Pontuação Estimada C5</span>
+                            <div class="flex items-baseline gap-2 mt-1">
+                                <span id="txtPontos" class="text-3xl font-extrabold text-white">0</span>
+                                <span class="text-sm text-slate-400">/ 200 pontos</span>
+                            </div>
+                        </div>
+
+                        <!-- Feedback dos Elementos -->
+                        <div class="space-y-2">
+                            <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Análise Crítica por Critério:</h4>
+                            <div id="listaFeedbackItens" class="space-y-2 text-xs">
+                                <!-- Preenchido via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="copiarPropostaTexto()" class="bg-slate-900 hover:bg-slate-800 text-white font-medium px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 text-sm shadow-sm">
-                        <i class="fa-regular fa-copy"></i> Copiar Texto para Slide
-                    </button>
+
+                <!-- Botão de Histórico -->
+                <button onclick="salvarNoHistorico()" id="btnSalvar" class="hidden mt-4 w-full bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-medium py-2.5 px-4 rounded-xl transition">
+                    📌 Salvar no Histórico da Aula
+                </button>
+            </div>
+
+            <!-- Bloco de Histórico Recente da Aula -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-5 shadow-xl">
+                <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Histórico de Propostas Analisadas Hoje</h4>
+                <div id="historicoContainer" class="space-y-2 max-h-40 overflow-y-auto pr-1 text-xs text-slate-300">
+                    <p class="text-slate-500 italic">Nenhuma proposta salva nesta aula ainda.</p>
                 </div>
             </div>
 
-            <!-- Seletor Específico de Ministérios para o Tema Atual -->
-            <div id="container-ministerios-botoes" class="flex flex-wrap gap-2 hidden">
-                <!-- Botões gerados dinamicamente para alternar órgãos do mesmo tema -->
-            </div>
-
-            <!-- Cards dos 5 Elementos da Competência 5 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                
-                <!-- 1. Agente -->
-                <div class="slide-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between border-t-4 border-t-indigo-600">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Elemento 1</span>
-                            <div class="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 font-bold">1</div>
-                        </div>
-                        <h4 class="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-building-columns text-indigo-500"></i> Agente Governamental
-                        </h4>
-                        <p id="card-agente" class="text-slate-600 text-sm leading-relaxed">
-                            Selecione um tema para visualizar o ministério ou órgão responsável pela problemática.
-                        </p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 italic">
-                        Quem deve executar a proposta?
-                    </div>
-                </div>
-
-                <!-- 2. Ação -->
-                <div class="slide-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between border-t-4 border-t-blue-600">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider">Elemento 2</span>
-                            <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 font-bold">2</div>
-                        </div>
-                        <h4 class="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-bullseye text-blue-500"></i> Ação Concreta
-                        </h4>
-                        <p id="card-acao" class="text-slate-600 text-sm leading-relaxed">
-                            Ação direta que o ministério precisa desenvolver para mitigar o problema.
-                        </p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 italic">
-                        O que deve ser feito?
-                    </div>
-                </div>
-
-                <!-- 3. Meio / Modo -->
-                <div class="slide-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between border-t-4 border-t-emerald-600">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Elemento 3</span>
-                            <div class="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold">3</div>
-                        </div>
-                        <h4 class="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-screwdriver-wrench text-emerald-500"></i> Meio / Ferramenta
-                        </h4>
-                        <p id="card-meio" class="text-slate-600 text-sm leading-relaxed">
-                            Programas federais, leis, repasses de verbas ou parcerias utilizadas.
-                        </p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 italic">
-                        Por meio de quê / de que forma?
-                    </div>
-                </div>
-
-                <!-- 4. Efeito -->
-                <div class="slide-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between border-t-4 border-t-amber-500">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Elemento 4</span>
-                            <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 font-bold">4</div>
-                        </div>
-                        <h4 class="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-flag-checkered text-amber-500"></i> Efeito Esperado
-                        </h4>
-                        <p id="card-efeito" class="text-slate-600 text-sm leading-relaxed">
-                            Impacto social de médio/longo prazo gerado pela intervenção.
-                        </p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 italic">
-                        Para quê / com qual objetivo?
-                    </div>
-                </div>
-
-                <!-- 5. Detalhamento / Repertório Coringa -->
-                <div class="slide-card bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between border-t-4 border-t-purple-600 md:col-span-2 lg:col-span-2">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-purple-600 uppercase tracking-wider">Elemento 5 (Detalhamento / Repertório)</span>
-                            <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center text-purple-600 font-bold">5</div>
-                        </div>
-                        <h4 class="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
-                            <i class="fa-solid fa-quote-left text-purple-500"></i> Repertório Coringa & Legislação
-                        </h4>
-                        <p id="card-repertorio" class="text-slate-700 text-sm leading-relaxed font-medium bg-purple-50/50 p-4 rounded-xl border border-purple-100">
-                            Citações filosóficas, artigos da Constituição Federal de 1988 ou dados que fundamentam o argumento e enriquecem a nota da competência.
-                        </p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 text-xs text-slate-400 italic">
-                        Agregando valor argumentativo à proposta nota 200.
-                    </div>
-                </div>
-
-            </div>
         </section>
 
     </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500">
-        <p>Desenvolvido para aulas de redação do ensino médio e preparação para o ENEM. 📚✨</p>
+    <!-- RODAPÉ -->
+    <footer class="text-center py-4 text-xs text-slate-500 border-t border-slate-800 mt-6">
+        Ferramenta desenvolvida para apoio pedagógico em sala de aula — Foco na Competência 5 do ENEM.
     </footer>
 
-    <!-- Modal de Consulta Rápida (Banco de Ministérios) -->
-    <div id="modal-consulta" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-4xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-6 bg-slate-900 text-white flex justify-between items-center">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-book-bookmark text-amber-400 text-xl"></i>
-                    <h3 class="text-lg font-bold">Banco Completo de Ministérios e Atribuições ENEM</h3>
-                </div>
-                <button onclick="fecharModalConsulta()" class="text-slate-400 hover:text-white p-2 rounded-lg transition-colors">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-4">
-                <p class="text-sm text-slate-600">Consulte abaixo todos os ministérios catalogados e suas respectivas competências chave cobradas na Redação do ENEM:</p>
-                <div id="lista-todos-ministerios" class="space-y-3">
-                    <!-- Preenchido via JS -->
-                </div>
-            </div>
-            <div class="p-4 bg-slate-100 border-t border-slate-200 text-right">
-                <button onclick="fecharModalConsulta()" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-xl text-sm font-medium transition-all">
-                    Fechar Consulta
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Caixa de Notificação Customizada (Substitui alert) -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3 text-sm font-medium">
-        <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
-        <span id="toast-mensagem">Texto copiado com sucesso!</span>
-    </div>
-
-    <!-- Script de Dados e Lógica da Aplicação -->
+    <!-- SCRIPT DE ANÁLISE -->
     <script>
-        // Banco de Dados estruturado por eixos temáticos e ministérios brasileiros reais
-        const bancoDadosENEM = [
-            {
-                id: "desigualdade",
-                nome: "Desigualdade Social e Pobreza",
-                icone: "fa-scale-unbalanced",
-                descricao: "Foco na erradicação da pobreza, marginalização e concentração de renda.",
-                ministerios: [
-                    {
-                        agente: "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome (MDS)",
-                        acao: "Expandir e fortalecer programas de transferência de renda associados a capacitação profissional técnica.",
-                        meio: "Por meio da ampliação do repasse de verbas do Cadastro Único (CadÚnico) e parcerias com o Sistema S (SENAI/SENAC), oferecendo oficinas nos centros comunitários.",
-                        efeito: "A fim de mitigar a vulnerabilidade socioeconômica e inserir esses cidadãos autônoma e formalmente no mercado de trabalho.",
-                        repertorio: "Conforme preconiza o Artigo 3º da Constituição Federal de 1988, que estabelece como objetivo fundamental da República 'erradicar a pobreza e a marginalização e reduzir as desigualdades sociais e regionais'."
-                    },
-                    {
-                        agente: "Ministério do Trabalho e Emprego (MTE)",
-                        acao: "Intensificar a fiscalização das leis trabalhistas e criar frentes de formalização para trabalhadores informais.",
-                        meio: "Por intermédio da modernização das delegacias regionais do trabalho e criação de linhas de microcrédito produtivo orientado.",
-                        efeito: "Com o intuito de garantir seguridade social, direitos previdenciários e dignidade salarial às parcelas marginalizadas da população.",
-                        repertorio: "Como pontua o sociólogo Zygmunt Bauman, a exclusão do mundo do trabalho formal transforma o indivíduo em um 'consumidor com defeito', destituído de cidadania plena."
-                    }
-                ]
-            },
-            {
-                id: "educacao",
-                nome: "Educação, Evasão e Deficit de Aprendizagem",
-                icone: "fa-book-open-reader",
-                descricao: "Foco na melhoria da infraestrutura escolar, permanência do aluno e valorização docente.",
-                ministerios: [
-                    {
-                        agente: "Ministério da Educação (MEC)",
-                        acao: "Ampliar o Programa Dinheiro Direto na Escola (PDDE) para requalificação de laboratórios e expansão de escolas em tempo integral.",
-                        meio: "Por meio do direcionamento de verbas do Fundo Nacional de Desenvolvimento da Educação (FNDE) em conjunto com as secretarias estaduais.",
-                        efeito: "Com o fito de combater a evasão escolar precoce e garantir um ambiente propício ao desenvolvimento cognitivo e social dos discentes.",
-                        repertorio: "Sob a ótica do educador Paulo Freire, 'a educação não transforma o mundo. Educação muda as pessoas. Pessoas transformam o mundo'."
-                    },
-                    {
-                        agente: "Ministério dos Direitos Humanos e da Cidadania (MDHC)",
-                        acao: "Instituir núcleos de apoio psicológico e assistencial nas redes públicas de ensino.",
-                        meio: "Por meio da contratação de equipes multidisciplinares compostas por psicólogos e assistentes sociais via concursos públicos.",
-                        efeito: "Visando acolher alunos em situação de vulnerabilidade e promover um ambiente escolar seguro e inclusivo.",
-                        repertorio: "Conforme o Artigo 205 da Constituição Federal, a educação é 'direito de todos e dever do Estado e da família', visando ao pleno desenvolvimento da pessoa."
-                    }
-                ]
-            },
-            {
-                id: "saude",
-                nome: "Saúde Mental e Bem-Estar Psicológico",
-                icone: "fa-brain",
-                descricao: "Foco na ampliação do acesso a terapias, combate ao estigma e suporte psicológico preventivo.",
-                ministerios: [
-                    {
-                        agente: "Ministério da Saúde (MS)",
-                        acao: "Expandir a cobertura e o quadro de profissionais das Redes de Atenção Psicossocial (RAPS) e dos Centros de Atenção Psicossocial (CAPS).",
-                        meio: "Por intermédio de aportes orçamentários específicos no SUS e campanhas nacionais de conscientização em mídias de massa.",
-                        efeito: "A fim de descentralizar o atendimento psiquiátrico e psicológico, garantindo suporte gratuito e acessível às classes de menor renda.",
-                        repertorio: "Como argumenta o filósofo Michel Foucault, a negligência com a saúde mental histórica tratava o sofrimento como desvio, o que exige hoje uma abordagem humanizada e preventiva."
-                    },
-                    {
-                        agente: "Ministério da Justiça e Segurança Pública (MJSP)",
-                        acao: "Criar canais de denúncia anônima e suporte cibernético contra o cyberbullying e discursos de ódio em redes sociais.",
-                        meio: "Por meio da atuação conjunta com a Polícia Federal em delegacias especializadas em crimes virtuais.",
-                        efeito: "Com o objetivo de blindar jovens e adolescentes contra pressões digitais deletérias que afetam gravemente a estabilidade emocional.",
-                        repertorio: "Conforme o Artigo 6º da Carta Magna, a saúde e a segurança são direitos sociais fundamentais inalienáveis."
-                    }
-                ]
-            },
-            {
-                id: "meioambiente",
-                nome: "Meio Ambiente e Crise Climática",
-                icone: "fa-earth-americas",
-                descricao: "Foco na preservação de biomas, transição energética e combate a crimes ambientais.",
-                ministerios: [
-                    {
-                        agente: "Ministério do Meio Ambiente e Mudança do Clima (MMA)",
-                        acao: "Intensificar as operações de fiscalização e o combate ao desmatamento ilegal e garimpo predatório em áreas de preservação.",
-                        meio: "Por meio do uso de monitoramento via satélite em tempo real associado ao fortalecimento operacional do IBAMA e ICMBio.",
-                        efeito: "Com o intuito de preservar a biodiversidade nacional e cumprir as metas internacionais de redução de emissões de carbono.",
-                        repertorio: "Segundo o pensador Immanuel Kant, 'quem é cruel com os animais e destrói a natureza torna-se também duro em suas relações com os homens'."
-                    },
-                    {
-                        agente: "Ministério de Minas e Energia (MME)",
-                        acao: "Incentivar a transição energética para matrizes limpas e renováveis, como solar e eólica, em zonas rurais e urbanas.",
-                        meio: "Por intermédio de subsídios fiscais e linhas de crédito verde oferecidas pelo Banco Nacional de Desenvolvimento Econômico e Social (BNDES).",
-                        efeito: "Visando mitigar os impactos das mudanças climáticas e promover o desenvolvimento sustentável a longo prazo.",
-                        repertorio: "Como estabelece o Artigo 225 da Constituição Federal, 'todos têm direito ao meio ambiente ecologicamente equilibrado, bem de uso comum do povo e essencial à sadia qualidade de vida'."
-                    }
-                ]
-            },
-            {
-                id: "tecnologia",
-                nome: "Exclusão Digital e Segurança na Internet",
-                icone: "fa-wifi",
-                descricao: "Foco na inclusão digital, alfabetização midiática e combate a fake news.",
-                ministerios: [
-                    {
-                        agente: "Ministério das Comunicações (MCom)",
-                        acao: "Universalizar o acesso à banda larga de alta velocidade em escolas públicas e regiões periféricas e rurais isoladas.",
-                        meio: "Por meio do leilão de redes 5G e expansão de programas federais de conectividade escolar com recursos do FUST.",
-                        efeito: "Com o fito de democratizar o acesso à informação, reduzindo o abismo tecnológico entre as diferentes classes sociais.",
-                        repertorio: "Conforme o conceito de 'Cidadania Digital', o acesso à rede deixou de ser mero privilégio para se tornar ferramenta basilar de exercício democrático e empregabilidade."
-                    },
-                    {
-                        agente: "Ministério da Educação (MEC)",
-                        acao: "Inserir diretrizes de letramento digital e pensamento crítico contra desinformação na Base Nacional Comum Curricular (BNCC).",
-                        meio: "Por intermédio da capacitação continuada de professores da rede pública e elaboração de cartilhas pedagógicas orientativas.",
-                        efeito: "A fim de formar cidadãos capazes de discernir fatos de fake news, fortalecendo o debate público saudável.",
-                        repertorio: "Como defendia o escritor Mário Quintana, 'o livro é um amigo que não muda de ideia', sendo necessário ensinar as novas gerações a valorizar fontes confiáveis de conhecimento."
-                    }
-                ]
-            },
-            {
-                id: "seguranca",
-                nome: "Segurança Pública e Violência Urbana",
-                icone: "fa-shield-halved",
-                descricao: "Foco na prevenção à criminalidade, inteligência policial e políticas sociais integradas.",
-                ministerios: [
-                    {
-                        agente: "Ministério da Justiça e Segurança Pública (MJSP)",
-                        acao: "Implementar o Sistema Único de Segurança Pública (SUSP) com foco em inteligência integrada e policiamento comunitário preventivo.",
-                        meio: "Por meio do repasse de verbas do Fundo Nacional de Segurança Pública (FNSP) para capacitação e aparelhamento das guardas e polícias.",
-                        efeito: "Com o intuito de reduzir os índices de criminalidade urbana e garantir a paz social nas metrópoles.",
-                        repertorio: "Segundo o contratualista Thomas Hobbes, o Estado existe primordialmente para garantir a segurança e o pacto social dos cidadãos."
-                    }
-                ]
-            },
-            {
-                id: "mulher",
-                nome: "Direitos das Mulheres e Violência de Gênero",
-                icone: "fa-venus",
-                descricao: "Foco no combate ao feminicídio, apoio a vítimas e igualdade salarial.",
-                ministerios: [
-                    {
-                        agente: "Ministério das Mulheres",
-                        acao: "Expandir a rede de Casas da Mulher Brasileira e implementar programas de autonomia financeira para vítimas de violência doméstica.",
-                        meio: "Por meio de convênios com governos estaduais e municipais, atrestando apoio jurídico, psicológico e profissional integrado.",
-                        efeito: "A fim de romper o ciclo da violência doméstica e assegurar a independência e dignidade das mulheres.",
-                        repertorio: "Conforme estipula a Lei Maria da Penha (Lei nº 11.340/2006), é dever do Estado coibir e prevenir a violência doméstica contra a mulher."
-                    }
-                ]
-            }
-        ];
+        let propostasSalvas = [];
 
-        let temaAtualId = bancoDadosENEM[0].id;
-        let indexMinisterioAtual = 0;
-
-        // Inicialização da Aplicação
-        document.addEventListener("DOMContentLoaded", () => {
-            renderizarTemas();
-            carregarTema(temaAtualId, 0);
-        });
-
-        function renderizarTemas() {
-            const grid = document.getElementById("grid-temas");
-            const contador = document.getElementById("contador-opcoes");
-            grid.innerHTML = "";
-            contador.innerText = `${bancoDadosENEM.length} Eixos Disponíveis`;
-
-            bancoDadosENEM.forEach((item) => {
-                const isAtivo = item.id === temaAtualId;
-                const card = document.createElement("button");
-                card.className = `text-left p-3.5 rounded-xl border transition-all flex items-start gap-3 ${
-                    isAtivo 
-                        ? 'border-indigo-600 bg-indigo-50/70 shadow-sm ring-2 ring-indigo-500/20' 
-                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/50 bg-white'
-                }`;
-                card.onclick = () => {
-                    temaAtualId = item.id;
-                    indexMinisterioAtual = 0;
-                    renderizarTemas();
-                    carregarTema(temaAtualId, 0);
-                };
-
-                card.innerHTML = `
-                    <div class="p-2 rounded-lg ${isAtivo ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'} transition-colors">
-                        <i class="fa-solid ${item.icone} text-base"></i>
-                    </div>
-                    <div>
-                        <h4 class="text-xs font-bold uppercase tracking-wide ${isAtivo ? 'text-indigo-900' : 'text-slate-700'}">${item.nome}</h4>
-                        <p class="text-xs text-slate-500 mt-0.5 line-clamp-1">${item.descricao}</p>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+        function carregarExemplo() {
+            document.getElementById('inputTema').value = "Desigualdade Social e Concentração de Renda";
+            document.getElementById('inputAgente').value = "Ministério do Desenvolvimento e Assistência Social (MDS)";
+            document.getElementById('inputAcao').value = "expandir os programas de transferência de renda associados a oficinas profissionalizantes";
+            document.getElementById('inputMeio').value = "por meio do aumento do repasse de verbas do CadÚnico em parceria com o Sistema S";
+            document.getElementById('inputEfeito').value = "a fim de mitigar a vulnerabilidade e inserir esses cidadãos no mercado de trabalho formal";
+            document.getElementById('inputDetalhamento').value = "conforme preconiza o artigo 3º da Constituição Federal sobre erradicar a pobreza";
+            analisarProposta();
         }
 
-        function carregarTema(idTema, indexMin) {
-            const eixo = bancoDadosENEM.find(t => t.id === idTema);
-            if (!eixo) return;
-
-            if (indexMin >= eixo.ministerios.length) indexMin = 0;
-            indexMinisterioAtual = indexMin;
-            const min = eixo.ministerios[indexMin];
-
-            // Atualiza cabeçalhos
-            document.getElementById("badge-tema").innerText = `Eixo: ${eixo.nome}`;
-            document.getElementById("titulo-ministerio").innerText = min.agente.split('(')[0].trim();
-            document.getElementById("subtitulo-ministerio").innerText = min.agente;
-
-            // Preenche os 5 elementos
-            document.getElementById("card-agente").innerText = min.agente;
-            document.getElementById("card-acao").innerText = min.acao;
-            document.getElementById("card-meio").innerText = min.meio;
-            document.getElementById("card-efeito").innerText = min.efeito;
-            document.getElementById("card-repertorio").innerText = min.repertorio;
-
-            // Gerencia botões de múltiplos ministérios para o mesmo tema se houver mais de 1
-            const containerBotoes = document.getElementById("container-ministerios-botoes");
-            if (eixo.ministerios.length > 1) {
-                containerBotoes.classList.remove("hidden");
-                containerBotoes.innerHTML = `<span class="text-xs font-semibold text-slate-500 self-center mr-2">Órgão / Ministério:</span>`;
-                eixo.ministerios.forEach((m, idx) => {
-                    const btn = document.createElement("button");
-                    btn.className = `px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                        idx === indexMin 
-                            ? 'bg-indigo-600 text-white shadow-sm' 
-                            : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                    }`;
-                    const siglaMatch = m.agente.match(/\(([^)]+)\)/);
-                    btn.innerText = siglaMatch ? siglaMatch[1] : `Ministério ${idx + 1}`;
-                    btn.onclick = () => carregarTema(idTema, idx);
-                    containerBotoes.appendChild(btn);
-                });
-            } else {
-                containerBotoes.classList.add("hidden");
-            }
-
-            // Animação leve nos cards
-            document.querySelectorAll('.slide-card').forEach(el => {
-                el.classList.remove('pulse-once');
-                void el.offsetWidth; // trigger reflow
-                el.classList.add('pulse-once');
-            });
-        }
-
-        function sortearProposta() {
-            // Sorteia um tema aleatório
-            const eixoAleatorio = bancoDadosENEM[Math.floor(Math.random() * bancoDadosENEM.length)];
-            const minAleatorioIndex = Math.floor(Math.random() * eixoAleatorio.ministerios.length);
-
-            temaAtualId = eixoAleatorio.id;
-            renderizarTemas();
-            carregarTema(temaAtualId, minAleatorioIndex);
-
-            // Rola suavemente até o resultado para o professor projetar ou mostrar na turma
-            document.getElementById("secao-resultado").scrollIntoView({ behavior: 'smooth', block: 'start' });
-            mostrarToast("Novo desafio sorteado para a turma! 🎲");
-        }
-
-        function copiarPropostaTexto() {
-            const agente = document.getElementById("card-agente").innerText;
-            const acao = document.getElementById("card-acao").innerText;
-            const meio = document.getElementById("card-meio").innerText;
-            const efeito = document.getElementById("card-efeito").innerText;
-            const repertorio = document.getElementById("card-repertorio").innerText;
-
-            const textoPronto = `Portanto, cabe ao ${agente} ${acao.toLowerCase()} ${meio.toLowerCase()} ${efeito.toLowerCase()} ${repertorio}`;
-
-            // Usa método compatível com iframe (document.execCommand)
-            const textArea = document.createElement("textarea");
-            textArea.value = textoPronto;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                mostrarToast("Proposta padrão ENEM copiada para a área de transferência!");
-            } catch (err) {
-                mostrarToast("Erro ao copiar texto.", true);
-            }
-            document.body.removeChild(textArea);
-        }
-
-        function abrirModalConsulta() {
-            const lista = document.getElementById("lista-todos-ministerios");
-            lista.innerHTML = "";
-
-            bancoDadosENEM.forEach(eixo => {
-                const headerEixo = document.createElement("div");
-                headerEixo.className = "font-bold text-sm text-indigo-700 bg-indigo-50 p-2.5 rounded-xl mt-4 mb-2 flex items-center gap-2";
-                headerEixo.innerHTML = `<i class="fa-solid ${eixo.icone}"></i> ${eixo.nome}`;
-                lista.appendChild(headerEixo);
-
-                eixo.ministerios.forEach(m => {
-                    const cardMin = document.createElement("div");
-                    cardMin.className = "bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-2 text-xs sm:text-sm";
-                    cardMin.innerHTML = `
-                        <div class="font-bold text-slate-900">${m.agente}</div>
-                        <div class="text-slate-600"><strong class="text-slate-700">Ação:</strong> ${m.acao}</div>
-                        <div class="text-slate-600"><strong class="text-slate-700">Meio:</strong> ${m.meio}</div>
-                        <div class="text-slate-600"><strong class="text-slate-700">Efeito:</strong> ${m.efeito}</div>
-                        <div class="text-purple-700 bg-purple-50 p-2.5 rounded-lg border border-purple-100 font-medium"><strong>Repertório:</strong> ${m.repertorio}</div>
-                    `;
-                    lista.appendChild(cardMin);
-                });
-            });
-
-            document.getElementById("modal-consulta").classList.remove("hidden");
-        }
-
-        function fecharModalConsulta() {
-            document.getElementById("modal-consulta").classList.add("hidden");
-        }
-
-        function mostrarToast(mensagem, erro = false) {
-            const toast = document.getElementById("toast");
-            const msgEl = document.getElementById("toast-mensagem");
-            msgEl.innerText = mensagem;
+        function limparCampos() {
+            document.getElementById('inputTema').value = "";
+            document.getElementById('inputAgente').value = "";
+            document.getElementById('inputAcao').value = "";
+            document.getElementById('inputMeio').value = "";
+            document.getElementById('inputEfeito').value = "";
+            document.getElementById('inputDetalhamento').value = "";
             
-            toast.classList.remove("translate-y-20", "opacity-0");
-            setTimeout(() => {
-                toast.classList.add("translate-y-20", "opacity-0");
-            }, 3500);
+            document.getElementById('resultadoVazio').classList.remove('hidden');
+            document.getElementById('relatorioAnalise').classList.add('hidden');
+            document.getElementById('btnSalvar').classList.add('hidden');
+            document.getElementById('badgeNota').className = "text-xs px-3 py-1 rounded-full font-bold bg-slate-700 text-slate-300";
+            document.getElementById('badgeNota').innerText = "Aguardando entrada";
+        }
+
+        function analisarProposta() {
+            const tema = document.getElementById('inputTema').value.trim();
+            const agente = document.getElementById('inputAgente').value.trim();
+            const acao = document.getElementById('inputAcao').value.trim();
+            const meio = document.getElementById('inputMeio').value.trim();
+            const efeito = document.getElementById('inputEfeito').value.trim();
+            const detalhamento = document.getElementById('inputDetalhamento').value.trim();
+
+            if (!agente || !acao || !meio || !efeito) {
+                alert("Por favor, preencha pelo menos o Agente, a Ação, o Meio e o Efeito para realizar a auditoria.");
+                return;
+            }
+
+            let elementosPresentes = 0;
+            let feedbackHTML = "";
+            let penalizacoes = [];
+
+            // 1. Agente
+            if (agente.length > 3) {
+                elementosPresentes++;
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Agente Válido:</strong> Órgão legítimo identificado.</div></div>`;
+            } else {
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-rose-500/30 flex items-start gap-2"><span>❌</span><div><strong class="text-rose-400">Agente Insuficiente:</strong> Muito vago (evite dizer apenas "o governo").</div></div>`;
+            }
+
+            // 2. Ação
+            const acoesVagas = ["conscientizar", "ajudar", "fazer palestras", "melhorar", "mudar", "acabar"];
+            let acaoVagaEncontrada = acoesVagas.some(termo => acao.toLowerCase().includes(termo));
+            
+            if (acao.length > 5 && !acaoVagaEncontrada) {
+                elementosPresentes++;
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Ação Concreta:</strong> Boa estruturação de intervenção.</div></div>`;
+            } else {
+                penalizacoes.push("Ação considerada vaga (ex: conscientizar/palestrar sem intervenção estrutural).");
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-amber-500/30 flex items-start gap-2"><span>⚠️</span><div><strong class="text-amber-400">Ação Vaga:</strong> O ENEM penaliza verbos como 'conscientizar' ou 'ajudar' isolados.</div></div>`;
+            }
+
+            // 3. Meio/Modo
+            if (meio.toLowerCase().includes("por meio") || meio.toLowerCase().includes("por intermédio") || meio.length > 8) {
+                elementosPresentes++;
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Meio/Modo Válido:</strong> Apresenta a ferramenta de execução.</div></div>`;
+            } else {
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-rose-500/30 flex items-start gap-2"><span>❌</span><div><strong class="text-rose-400">Meio Ausente:</strong> Falta detalhar o 'como' de forma prática.</div></div>`;
+            }
+
+            // 4. Efeito
+            if (efeito.toLowerCase().includes("a fim de") || efeito.toLowerCase().includes("para") || efeito.length > 8) {
+                elementosPresentes++;
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Efeito Válido:</strong> Impacto social alinhado.</div></div>`;
+            } else {
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-rose-500/30 flex items-start gap-2"><span>❌</span><div><strong class="text-rose-400">Efeito Incompleto:</strong> Falta a finalidade clara da intervenção.</div></div>`;
+            }
+
+            // 5. Detalhamento
+            if (detalhamento.length > 5) {
+                elementosPresentes++;
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-emerald-500/30 flex items-start gap-2"><span>✅</span><div><strong class="text-emerald-400">Detalhamento Presente:</strong> Enriquece a proposta.</div></div>`;
+            } else {
+                feedbackHTML += `<div class="bg-slate-900 p-2.5 rounded-lg border border-slate-700 flex items-start gap-2"><span>ℹ️</span><div><strong class="text-slate-400">Sem Detalhamento:</strong> Faltou um repertório coringa ou justificativa extra (perde 40 pontos).</div></div>`;
+            }
+
+            // Cálculo da Nota Simulada (Cada elemento vale 40 pts, total 200)
+            let notaFinal = elementosPresentes * 40;
+            if (acaoVagaEncontrada && notaFinal >= 40) notaFinal -= 40; // Penalidade por vaguidade
+
+            // Exibir na tela
+            document.getElementById('resultadoVazio').classList.add('hidden');
+            document.getElementById('relatorioAnalise').classList.remove('hidden');
+            document.getElementById('btnSalvar').classList.remove('hidden');
+            
+            document.getElementById('txtPontos').innerText = notaFinal;
+            document.getElementById('listaFeedbackItens').innerHTML = feedbackHTML;
+
+            const badge = document.getElementById('badgeNota');
+            if (notaFinal === 200) {
+                badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                badge.innerText = "Nota 200 (Perfeito!)";
+            } else if (notaFinal >= 120) {
+                badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                badge.innerText = "Bom, mas pode melhorar";
+            } else {
+                badge.className = "text-xs px-3 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                badge.innerText = "Insuficiente (Faltam elementos)";
+            }
+        }
+
+        function salvarNoHistorico() {
+            const tema = document.getElementById('inputTema').value || "Tema livre";
+            const nota = document.getElementById('txtPontos').innerText;
+
+            propostasSalvas.unshift({ tema, nota });
+
+            let htmlHist = "";
+            propostasSalvas.forEach((item, idx) => {
+                htmlHist += `<div class="bg-slate-900 p-2 rounded-lg border border-slate-700 flex justify-between items-center">
+                    <span class="truncate max-w-[180px]" title="${item.tema}">#${idx+1} - ${item.tema}</span>
+                    <span class="font-bold text-indigo-400">${item.nota} pts</span>
+                </div>`;
+            });
+
+            document.getElementById('historicoContainer').innerHTML = htmlHist;
+            alert("Proposta salva no painel da aula!");
         }
     </script>
 </body>
